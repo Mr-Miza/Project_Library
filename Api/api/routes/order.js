@@ -86,6 +86,7 @@ router.delete('/:orderId',(req,res,next)=> {
     })
 }) ;
 
+ // continue at min 10:00 
 router.post('/',(req,res,next)=> {
     product.findById(req.body.productID) // checks if the produt with the specified ID exists , then proceds to create the order
     .then(product=> {
@@ -94,8 +95,8 @@ router.post('/',(req,res,next)=> {
         }
         const orders = new Orders({
             _id: new mongoose.Types.ObjectId(),
-            quantity: req.body.quantity, 
-            product: req.body.productID //use as input the productID as thats whats requested 
+            quantity: req.body.quantity,
+            product: req.body.productID
         });
         return orders.save()
     })

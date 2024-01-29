@@ -125,40 +125,31 @@ router.delete("/:productID",(req,res,next)=>
     });
 
 });
-router.patch("/:productID", upload.single('productImage'), (req, res, next) => {
-    const id = req.params.productID;
-    const updateOPS = {};
-    const bdy=req.body
-    console.log(bdy)
-    // Check if req.body is an array
-    if (!Array.isArray(req.body)) {
-        return res.status(400).json({
-            message: 'Invalid request body format. Expecting an array.'
-        });
-    }
 
-    for (const ops of req.body) {
-
-        updateOPS[ops.propName] = ops.value;
+router.patch("/:productID",upload.single('productImage'), (req,res,next)=>{ // router not finished , left the vid 30:20  , continue there 
+    const id =req.params.productID;
+    const updateOPS= {};
+    for (const ops of req.body){
+        updateOPS[ops.propName] = ops.value ;
     }
-    
-    product.updateOne({ _id: id }, { $set: updateOPS })
-        .exec()
-        .then(result => {
-            res.status(202).json({
-                message: 'product updated',
-                request: {
-                    type: 'GET',
-                    url: 'localhost:3000/product/' + id
-                }
-            })
+    product.update({_id:id},{
+       $set: updateOPS })
+    .exec()
+    .then(result => {
+        res.status(202).json({
+            message: 'product updated' ,
+            request: {
+                type: 'GET' ,
+                url: 'localhost:3000/product/'+ id
+            }
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                message: 'couldnt update the item'
-            })
+    })
+    .catch(err => {
+        console.log(err); 
+        res.status(500).json({
+            message: 'couldnt update the item'
         })
+    })
 })
 
 module.exports=router ;

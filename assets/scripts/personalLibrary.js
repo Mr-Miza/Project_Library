@@ -4,23 +4,22 @@ booksTableBody.empty();
 //Array contains books stored for Personal Library
 var BooksToAdd = JSON.parse(localStorage.getItem('addedBooks')) || [];
 
-
 function populate(){
 
-    //console.log(typeof BooksToAdd);
-    //console.log(BooksToAdd);
+    const jsonString = JSON.stringify(BooksToAdd);
+    console.log(`BooksToAdd = ${jsonString}`);
 
     $.each(BooksToAdd, function(index, book){
 
         console.log(`Index = ${index}. Book = ${book}`);
 
-        const newRowHtml = `<tr data-book-id="${book.id}">
-            <td>${book.id}</td>
+        const newRowHtml = `<tr data-book-id="${book._id}">
+            <td>${book._id}</td>
             <td>${book.title}</td>
             <td>${book.author}</td>
             <td>${book.category}</td>
             <td>
-                <button id="removeBtn" data-book-id="${book.id}">Remove</button>
+                <button id="removeBtn" data-book-id="${book._id}">Remove</button>
             </td>
         </tr>`;
 
@@ -35,17 +34,14 @@ populate();
 
 $(booksTableBody).on('click', "#removeBtn", function(){
     const bookId = $(this).data('book-id');
-    const book = BooksToAdd.find(n => n.id === bookId);
+    const book = BooksToAdd.find(n => n._id === bookId);
 
     console.log(`Selected book: ${book.title}`)
-
-    localStorage.removeItem('bookToBeRemovedId');
-    localStorage.setItem('bookToBeRemovedId', bookId);
-
-
+    
     $("#remove-title").text(book.title);
-
     $("#removeModal").show();
+
+    localStorage.setItem('bookToBeRemovedId', bookId);
 })
 
 $("#closeEditModalSpn").click(function(){
@@ -64,7 +60,7 @@ $("#confirmBtn").click(function(){
     //console.log('bookId from localstorage = ', bookId);
 
     // Find id in Personal Library book array
-    const index = BooksToAdd.findIndex(book => book.id == bookId);
+    const index = BooksToAdd.findIndex(book => book._id == bookId);
 
     //console.log('all books = ', BooksToAdd);
     //console.log('index == ', index);
